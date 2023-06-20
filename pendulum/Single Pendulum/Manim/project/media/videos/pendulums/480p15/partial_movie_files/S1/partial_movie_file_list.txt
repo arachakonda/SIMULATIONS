@@ -1,0 +1,8 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/4266129954_1643730926_223132457.mp4'
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/1380718205_1442636774_479945870.mp4'
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/1380718205_2421482099_1610003466.mp4'
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/1380718205_3847920756_1490578489.mp4'
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/1380718205_1446064412_2047401701.mp4'
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/1380718205_4116422412_484275116.mp4'
+file 'file:/home/ananth/manim/project/media/videos/pendulums/480p15/partial_movie_files/S1/1380718205_2474512999_1013902709.mp4'
