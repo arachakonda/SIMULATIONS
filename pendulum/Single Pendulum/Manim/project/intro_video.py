@@ -109,7 +109,7 @@ class PendulumText(Scene):
         self.play(Write(formfinaltex))
         self.wait()
         xdtex = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}").next_to(formfinaltex[0],1.5*DOWN).scale(0.5)
-        fxtex = MathTex(r"-\begin{bmatrix}-\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}").next_to(formfinaltex[2],DOWN).scale(0.5)
+        fxtex = MathTex(r"\begin{bmatrix}\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}").next_to(formfinaltex[2],DOWN).scale(0.5)
         gxutex = MathTex(r"\begin{bmatrix}0 \\ \frac{u}{ml^2}\end{bmatrix}").next_to(formfinaltex[4],DOWN).scale(0.5)
         framebox0 = SurroundingRectangle(formfinaltex[0], buff = .1)
         framebox2 = SurroundingRectangle(formfinaltex[2], buff = .1)
@@ -127,6 +127,23 @@ class PendulumText(Scene):
         self.play(Write(gxutex))
 
         self.wait(4)
-
-
+        boxgroup = Group(framebox0, framebox2, framebox4)
+        self.play(FadeOut(boxgroup))
+        self.play(FadeOut(qdeqtex), LaggedStart(*[FadeOut(obj, shift=UP) for obj in formfinaltex]))
+        formgroup = Group(xdtex,fxtex,gxutex)
+        self.play(formgroup.animate.shift(UP+RIGHT).scale(1.5))
+        formgroupeq = MathTex(r"=").next_to(xdtex, 0.2*RIGHT).scale(0.5)
+        formgroupplus = MathTex(r"+").next_to(fxtex, RIGHT).scale(0.5)
+        self.play(Create(formgroupeq), Create(formgroupplus))
+        self.wait()
         
+        lightsOutPendGroup = Group(tendon,verticalLine,bob,path,dot,qtex,qdtex,qddtex)
+        self.play(FadeOut(lightsOutPendGroup), FadeOut(formulationtitle))
+
+        initial_equation = Group(xdtex,fxtex,gxutex,formgroupeq,formgroupplus)
+        final_equation = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",
+                                 r"\begin{bmatrix}\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}",
+                                 r"\begin{bmatrix}0 \\ \frac{u}{ml^2}\end{bmatrix}").to_edge(UP)
+
+        self.play(FadeOut(states_defined_as), Transform(initial_equation,final_equation))
+        self.wait(4)
