@@ -171,12 +171,19 @@ class PendulumLinearize(Scene):
         self.play(Transform(linearizeTitle[1],linearizationTitle),FadeOut(frameoval),LaggedStart(*[FadeOut(linearizeTitle[0],shift=LEFT), FadeOut(linearizeTitle[2],shift=RIGHT)]))
         self.wait()
 
-        lin_proc = Tex("When we linearize, the system dynamics becomes 0").next_to(ssequation, DOWN).scale(0.7)_
-        self.play(FadeIn(lin_proc))
+        lin_proc_1 = Tex("When we linearize, the system dynamics becomes 0").next_to(ssequation, DOWN).scale(0.7)
+        self.play(FadeIn(lin_proc_1))
         self.wait()
-        self.play(FadeOut(lin_proc))
+        self.play(FadeOut(lin_proc_1))
 
+        lin_proc_2 = Tex(r"Setting $\dot{X} = 0$").next_to(ssequation, DOWN).scale(0.7)
+        self.play(FadeIn(lin_proc_2))
+
+        lin_proc_3 = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",r"0").next_to(lin_proc_2,DOWN).scale(0.7)
+        self.play(Write(lin_proc_3))
         
+        lin_proc_4 = MathTex(r"q = 0, n\pi, n \in \mathbb{I}")
+
         
 
 
