@@ -171,7 +171,7 @@ class PendulumLinearize(Scene):
         self.play(Transform(linearizeTitle[1],linearizationTitle),FadeOut(frameoval),LaggedStart(*[FadeOut(linearizeTitle[0],shift=LEFT), FadeOut(linearizeTitle[2],shift=RIGHT)]))
         self.wait()
 
-        lin_proc_1 = Tex("When we linearize, the system dynamics becomes 0").next_to(ssequation, DOWN).scale(0.7)
+        lin_proc_1 = Tex("We Linearize around equilibrium where system evolves with little dependence on states").next_to(ssequation, DOWN).scale(0.7)
         self.play(FadeIn(lin_proc_1))
         self.wait()
         self.play(FadeOut(lin_proc_1))
@@ -182,7 +182,32 @@ class PendulumLinearize(Scene):
         lin_proc_3 = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",r"0").next_to(lin_proc_2,DOWN).scale(0.7)
         self.play(Write(lin_proc_3))
         
-        lin_proc_4 = MathTex(r"q = 0, n\pi, n \in \mathbb{I}")
+        lin_proc_4 = Tex(r"$q^* = 0, n\pi, u^*=0$ where $n \in \mathbb{I}$").next_to(lin_proc_3,DOWN).scale(0.7)
+        self.play(Write(lin_proc_4))
+
+        lin_proc_5 = Tex("are the operating points").next_to(lin_proc_4,DOWN).scale(0.7)
+        self.play(Create(lin_proc_5))
+        self.wait()
+        lin_fade_g1 = Group(lin_proc_4, lin_proc_5)
+        self.play(FadeOut(lin_fade_g1))
+
+        lin_proc_6 = MathTex(r"\dot{x} = {f}(x,u) \approx {f}(x^*,u^*) + \begin{bmatrix} \frac{\partial f}{\partial x}\end{bmatrix}_{x=x^*,u=u^*} (x - x^*) + \begin{bmatrix} \frac {\partial f}{\partial u}\end{bmatrix}_{x=x^*,u=u^*} (u - u^*)").next_to(lin_proc_3,DOWN).scale(0.7)
+        self.play(Write(lin_proc_6))
+        self.wait()
+        self.play(FadeOut(lin_proc_6))
+
+        linearized = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",
+                                 r"\begin{bmatrix}0 & 1\\ -\frac{g}{l} & -\frac{b}{ml^2}\end{bmatrix}",r"\begin{bmatrix}q \\ \dot{q}\end{bmatrix}", r"+",
+                                 r"u\begin{bmatrix}0 \\ \frac{1}{ml^2}\end{bmatrix}").next_to(lin_proc_3,DOWN)
+        self.play(Write(linearized))
+        self.wait(4)
+
+        self.play(FadeOut(lin_proc_2),FadeOut(lin_proc_3),*[FadeOut(obj,shift=DOWN) for obj in ssequation])
+
+        
+        self.play(linearized.animate.shift(ORIGIN+3*UP))
+        self.wait(4)
+
 
         
 
