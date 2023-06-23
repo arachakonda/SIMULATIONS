@@ -141,9 +141,43 @@ class PendulumText(Scene):
         self.play(FadeOut(lightsOutPendGroup), FadeOut(formulationtitle))
 
         initial_equation = Group(xdtex,fxtex,gxutex,formgroupeq,formgroupplus)
-        final_equation = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",
-                                 r"\begin{bmatrix}\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}",
+        final_equation = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",
+                                 r"\begin{bmatrix}\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}", r"+",
                                  r"\begin{bmatrix}0 \\ \frac{u}{ml^2}\end{bmatrix}").to_edge(UP)
 
         self.play(FadeOut(states_defined_as), Transform(initial_equation,final_equation))
         self.wait(4)
+
+class PendulumLinearize(Scene):
+    def construct(self):
+        ssequation = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",
+                                 r"\begin{bmatrix}\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}", r"+",
+                                 r"\begin{bmatrix}0 \\ \frac{u}{ml^2}\end{bmatrix}").to_edge(UP)
+        self.add(ssequation)
+        
+        self.play(ssequation.animate.shift(DOWN).scale(0.7))
+
+        linearizeTitle = Tex("Let us ","Linearize...","!!").to_edge(UP)
+        self.play(Create(linearizeTitle))
+        self.wait(2)
+        frameoval = SurroundingRectangle(linearizeTitle[1],corner_radius=0.3,buff=0.1)
+        self.play(Create(frameoval))
+        linearizationTitle= Tex("Linearization")
+        linearizationQuestion = Tex("??")
+        linearizationTitle.to_edge(UP)
+        linearizationQuestion.next_to(linearizeTitle,RIGHT)
+        self.play(Transform(linearizeTitle[2],linearizationQuestion))
+        self.wait()
+        self.play(Transform(linearizeTitle[1],linearizationTitle),FadeOut(frameoval),LaggedStart(*[FadeOut(linearizeTitle[0],shift=LEFT), FadeOut(linearizeTitle[2],shift=RIGHT)]))
+        self.wait()
+
+        lin_proc = Tex("When we linearize, the system dynamics becomes 0").next_to(ssequation, DOWN).scale(0.7)_
+        self.play(FadeIn(lin_proc))
+        self.wait()
+        self.play(FadeOut(lin_proc))
+
+        
+        
+
+
+
