@@ -1,4 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/home/ananth/projects/SIMULATIONS/pendulum/Single Pendulum/Manim/project/media/videos/intro_video/480p15/partial_movie_files/PendulumExample/4266129954_1130721535_54616800.mp4'
-file 'file:/home/ananth/projects/SIMULATIONS/pendulum/Single Pendulum/Manim/project/media/videos/intro_video/480p15/partial_movie_files/PendulumExample/1380718205_87370825_2069549639.mp4'
-file 'file:/home/ananth/projects/SIMULATIONS/pendulum/Single Pendulum/Manim/project/media/videos/intro_video/480p15/partial_movie_files/PendulumExample/1380718205_3926136284_736594530.mp4'

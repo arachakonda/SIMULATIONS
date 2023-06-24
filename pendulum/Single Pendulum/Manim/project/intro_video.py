@@ -1,6 +1,6 @@
 from  manim import *
 from manim_physics import *
-from numpy import angle
+import numpy as np
 
 
 class Introduction(Scene):
@@ -171,7 +171,7 @@ class PendulumLinearize(Scene):
         self.play(Transform(linearizeTitle[1],linearizationTitle),FadeOut(frameoval),LaggedStart(*[FadeOut(linearizeTitle[0],shift=LEFT), FadeOut(linearizeTitle[2],shift=RIGHT)]))
         self.wait()
 
-        lin_proc_1 = Tex("We Linearize around equilibrium where system evolves with little dependence on states").next_to(ssequation, DOWN).scale(0.7)
+        lin_proc_1 = Tex("We linearize around equilibrium where system evolves with little dependence on states").next_to(ssequation, DOWN).scale(0.7)
         self.play(FadeIn(lin_proc_1))
         self.wait()
         self.play(FadeOut(lin_proc_1))
@@ -182,11 +182,11 @@ class PendulumLinearize(Scene):
         lin_proc_3 = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",r"0").next_to(lin_proc_2,DOWN).scale(0.7)
         self.play(Write(lin_proc_3))
         
-        lin_proc_4 = Tex(r"$q^* = 0, n\pi, u^*=0$ where $n \in \mathbb{I}$").next_to(lin_proc_3,DOWN).scale(0.7)
+        lin_proc_4 = Tex(r"$q^* = 0, n\pi; \> u^*=0\>\>\>$where $n \in \mathbb{I}$").next_to(lin_proc_3,DOWN).scale(0.7)
         self.play(Write(lin_proc_4))
 
         lin_proc_5 = Tex("are the operating points").next_to(lin_proc_4,DOWN).scale(0.7)
-        self.play(Create(lin_proc_5))
+        self.play(FadeIn(lin_proc_5))
         self.wait()
         lin_fade_g1 = Group(lin_proc_4, lin_proc_5)
         self.play(FadeOut(lin_fade_g1))
@@ -206,10 +206,97 @@ class PendulumLinearize(Scene):
 
         
         self.play(linearized.animate.shift(ORIGIN+3*UP))
-        self.wait(4)
+        self.wait(2)
+        linearizedor = Tex("(or)").next_to(linearized,DOWN).scale(0.6)
+        linearizedpi = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",
+                                 r"\begin{bmatrix}0 & 1\\ \frac{g}{l} & -\frac{b}{ml^2}\end{bmatrix}",r"\begin{bmatrix}q \\ \dot{q}\end{bmatrix}", r"+",
+                                 r"u\begin{bmatrix}0 \\ \frac{1}{ml^2}\end{bmatrix}").next_to(linearizedor,DOWN)
+
+        self.play(FadeIn(linearizedor))
+        self.play(Write(linearizedpi))
+        self.wait(2)
+        self.play(FadeOut(linearizeTitle[1]), FadeOut(linearized),FadeOut(linearizedor),FadeOut(linearizedpi))
+        self.wait()
 
 
-        
+class WhyLinearize(Scene):
+    def construct(self):
+        # resolution_fa = 24
+        # self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
 
+        # def param_diff(q, qd):
+        #     x = q
+        #     y = qd
+        #     g = 9.8132
+        #     b = 0.1
+        #     m = 1
+        #     l = 3
+        #     z = -(g/l)*np.sin(q) - (b/(m*l^2))*qd
+        #     return np.array([x, y, z])
 
+        # param_plane = Surface(
+        #     param_diff,
+        #     resolution=(resolution_fa, resolution_fa),
+        #     v_range=[-5, +5],
+        #     u_range=[-5, +5]
+        # )
 
+        # param_plane.scale(0.5, about_point=ORIGIN)
+        # param_plane.set_style(fill_opacity=1,stroke_color=GREEN)
+        # param_plane.set_fill_by_checkerboard(ORANGE, BLUE, opacity=0.5)
+        # axes = ThreeDAxes()
+        # self.add(axes,param_plane)
+
+        # self.begin_ambient_camera_rotation(rate=1)
+        # self.wait(5)
+        # self.stop_ambient_camera_rotation()
+        # self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES)
+        # self.wait()
+
+        plane = NumberPlane(x_range=[-10, 10, 1], y_range=[-10, 10, 1], axis_config={"include_numbers": True}).scale(1)
+        xLabel = plane.get_x_axis_label(r"\theta", edge=RIGHT, direction=RIGHT).scale(0.7)
+        yLabel = plane.get_y_axis_label(r"\dot{\theta}", edge=UP, direction=UP).scale(0.7)
+        g = 9.8132
+        b = 0.1
+        m = 1
+        l = 3
+        func = lambda pos: (-(g/l)*np.sin(pos[0]) - (b/(m*l^2))*pos[1])*UP + pos[1]*RIGHT
+        vectorField = ArrowVectorField(func, x_range=[-10, 10, 0.5]).scale(1)
+
+        self.play(FadeIn(VGroup(plane, xLabel, yLabel)))
+        self.play(*[GrowArrow(vec) for vec in vectorField], run_time=5)
+        self.wait(3)
+
+class WhyLinearize2(ThreeDScene):
+    def construct(self):
+        resolution_fa = 24
+        self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
+
+        def param_diff(q, qd):
+            x = q
+            y = qd
+            g = 9.8132
+            b = 0.1
+            m = 1
+            l = 3
+            z = np.arcsin(((m*l**2)*qd +b*q)/(-m*g*l))
+            return np.array([x, y, z])
+
+        param_plane = Surface(
+            param_diff,
+            resolution=(resolution_fa, resolution_fa),
+            v_range=[-1, +1],
+            u_range=[-1, +1]
+        )
+
+        param_plane.scale(0.5, about_point=ORIGIN)
+        param_plane.set_style(fill_opacity=1,stroke_color=GREEN)
+        param_plane.set_fill_by_checkerboard(ORANGE, BLUE, opacity=0.5)
+        axes = ThreeDAxes()
+        self.add(axes,param_plane)
+
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait(5)
+        self.stop_ambient_camera_rotation()
+        self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES)
+        self.wait()

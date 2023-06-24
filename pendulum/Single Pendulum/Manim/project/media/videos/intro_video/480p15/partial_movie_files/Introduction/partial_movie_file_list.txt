@@ -1,3 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/home/ananth/projects/SIMULATIONS/pendulum/Single Pendulum/Manim/project/media/videos/intro_video/480p15/partial_movie_files/Introduction/4266129954_3211090552_223132457.mp4'
-file 'file:/home/ananth/projects/SIMULATIONS/pendulum/Single Pendulum/Manim/project/media/videos/intro_video/480p15/partial_movie_files/Introduction/1380718205_3837998516_3057744797.mp4'
