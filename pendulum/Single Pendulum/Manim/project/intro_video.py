@@ -218,85 +218,69 @@ class PendulumLinearize(Scene):
         self.play(FadeOut(linearizeTitle[1]), FadeOut(linearized),FadeOut(linearizedor),FadeOut(linearizedpi))
         self.wait()
 
+config.frame_height = 9
+config.frame_width = 16
 
 class WhyLinearize(Scene):
     def construct(self):
-        # resolution_fa = 24
-        # self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
+        self.show_axis()
+        self.move_dot_and_draw_curve()
+        self.wait()
 
-        # def param_diff(q, qd):
-        #     x = q
-        #     y = qd
-        #     g = 9.8132
-        #     b = 0.1
-        #     m = 1
-        #     l = 3
-        #     z = -(g/l)*np.sin(q) - (b/(m*l^2))*qd
-        #     return np.array([x, y, z])
-
-        # param_plane = Surface(
-        #     param_diff,
-        #     resolution=(resolution_fa, resolution_fa),
-        #     v_range=[-5, +5],
-        #     u_range=[-5, +5]
-        # )
-
-        # param_plane.scale(0.5, about_point=ORIGIN)
-        # param_plane.set_style(fill_opacity=1,stroke_color=GREEN)
-        # param_plane.set_fill_by_checkerboard(ORANGE, BLUE, opacity=0.5)
-        # axes = ThreeDAxes()
-        # self.add(axes,param_plane)
-
-        # self.begin_ambient_camera_rotation(rate=1)
-        # self.wait(5)
-        # self.stop_ambient_camera_rotation()
-        # self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES)
-        # self.wait()
-
+    def show_axis(self):
         plane = NumberPlane(x_range=[-10, 10, 1], y_range=[-10, 10, 1], axis_config={"include_numbers": True}).scale(1)
-        xLabel = plane.get_x_axis_label(r"\theta", edge=RIGHT, direction=RIGHT).scale(0.7)
-        yLabel = plane.get_y_axis_label(r"\dot{\theta}", edge=UP, direction=UP).scale(0.7)
+        plane_transformed = NumberPlane(x_range=[-20, 20, 1], y_range=[-20, 20, 1],axis_config={"include_numbers": True}).scale(1)
+        xLabel = plane_transformed.get_x_axis_label(r"\theta", edge=RIGHT, direction=RIGHT).scale(0.7)
+        yLabel = plane_transformed.get_y_axis_label(r"\dot{\theta}", edge=UP, direction=UP).scale(0.7)
         g = 9.8132
         b = 0.1
         m = 1
         l = 3
-        func = lambda pos: (-(g/l)*np.sin(pos[0]) - (b/(m*l^2))*pos[1])*UP + pos[1]*RIGHT
-        vectorField = ArrowVectorField(func, x_range=[-10, 10, 0.5]).scale(1)
+        func = lambda pos: (-(g/l)*np.sin(pos[0]) - (b/(m*l^2))*pos[1])*UP + pos[1]*RIGHT #up =Y unit vec and down=X unit vec
+        vectorField = ArrowVectorField(func, x_range=[-10, 10, 0.5], y_range=[-10,10,0.5]).scale(1)
+        vectorField_transform = ArrowVectorField(func,x_range=[-20, 20, 1], y_range=[-20,20,1]).scale(1)
 
-        self.play(FadeIn(VGroup(plane, xLabel, yLabel)))
-        self.play(*[GrowArrow(vec) for vec in vectorField], run_time=5)
+        self.play(FadeIn(VGroup(plane_transformed, xLabel, yLabel)))
+        self.play(*[GrowArrow(vec) for vec in vectorField_transform], run_time=5)
         self.wait(3)
 
-class WhyLinearize2(ThreeDScene):
-    def construct(self):
-        resolution_fa = 24
-        self.set_camera_orientation(phi=75 * DEGREES, theta=-30 * DEGREES)
+        self.initial_value = 2.3*UP + 3.6*RIGHT
+        self.final_value = self.initial_value
 
-        def param_diff(q, qd):
-            x = q
-            y = qd
+    def move_dot_and_draw_curve(self):
+        dot = Dot(radius=0.08, color=YELLOW)
+        dot.move_to(self.initial_value)
+        self.t_offset = 0
+        rate = 0.25
+
+        def go_around_circle(mob, dt):
+            self.t_offset += (dt * rate)
+            #print(self.t_offset)
             g = 9.8132
             b = 0.1
             m = 1
             l = 3
-            z = np.arcsin(((m*l**2)*qd +b*q)/(-m*g*l))
-            return np.array([x, y, z])
+            mu = b/m*l**2
+            self.final_value[1] += (-(g/l)*np.sin(self.final_value[0]) - mu*self.final_value[1])*dt
+            self.final_value[0] += self.final_value[1]*dt
+            mob.move_to(self.final_value)
 
-        param_plane = Surface(
-            param_diff,
-            resolution=(resolution_fa, resolution_fa),
-            v_range=[-1, +1],
-            u_range=[-1, +1]
-        )
+        self.curve = VGroup()
+        self.curve.add(Line(self.initial_value,self.initial_value))
+        def get_curve():
+            last_line = self.curve[-1]
+            new_line = Line(last_line.get_end(),self.final_value, color=YELLOW_D)
+            self.curve.add(new_line)
 
-        param_plane.scale(0.5, about_point=ORIGIN)
-        param_plane.set_style(fill_opacity=1,stroke_color=GREEN)
-        param_plane.set_fill_by_checkerboard(ORANGE, BLUE, opacity=0.5)
-        axes = ThreeDAxes()
-        self.add(axes,param_plane)
+            return self.curve
 
-        self.begin_ambient_camera_rotation(rate=1)
-        self.wait(5)
-        self.stop_ambient_camera_rotation()
-        self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES)
-        self.wait()
+        dot.add_updater(go_around_circle).update(dt=0.0000001)
+
+        
+        sine_curve_line = always_redraw(get_curve)
+
+        self.add(dot)
+        self.add(sine_curve_line)
+        self.wait(20)
+
+        dot.remove_updater(go_around_circle)
