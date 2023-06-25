@@ -2,6 +2,8 @@ from  manim import *
 from manim_physics import *
 import numpy as np
 
+import scipy
+
 
 class Introduction(Scene):
     def construct(self):
@@ -218,11 +220,12 @@ class PendulumLinearize(Scene):
         self.play(FadeOut(linearizeTitle[1]), FadeOut(linearized),FadeOut(linearizedor),FadeOut(linearizedpi))
         self.wait()
 
-config.frame_height = 9
-config.frame_width = 16
+
 
 class WhyLinearize(Scene):
     def construct(self):
+        config.frame_height = 18
+        config.frame_width = 32
         self.show_axis()
         self.move_dot_and_draw_curve()
         self.wait()
@@ -236,7 +239,8 @@ class WhyLinearize(Scene):
         b = 0.1
         m = 1
         l = 3
-        func = lambda pos: (-(g/l)*np.sin(pos[0]) - (b/(m*l^2))*pos[1])*UP + pos[1]*RIGHT #up =Y unit vec and down=X unit vec
+        mu = b/m*l**2
+        func = lambda pos: (-(g/l)*np.sin(pos[0]) - (mu)*pos[1])*UP + pos[1]*RIGHT #up =Y unit vec and down=X unit vec
         vectorField = ArrowVectorField(func, x_range=[-10, 10, 0.5], y_range=[-10,10,0.5]).scale(1)
         vectorField_transform = ArrowVectorField(func,x_range=[-20, 20, 1], y_range=[-20,20,1]).scale(1)
 
@@ -244,25 +248,41 @@ class WhyLinearize(Scene):
         self.play(*[GrowArrow(vec) for vec in vectorField_transform], run_time=5)
         self.wait(3)
 
-        self.initial_value = 2.3*UP + 3.6*RIGHT
+        self.initial_value = 2.3*UP + 0*RIGHT
         self.final_value = self.initial_value
 
     def move_dot_and_draw_curve(self):
         dot = Dot(radius=0.08, color=YELLOW)
         dot.move_to(self.initial_value)
         self.t_offset = 0
-        rate = 0.25
+
+
+        def fx(t,y):
+            y = np.zeros_like(self.final_value,dtype=float)
+            g = 9.8132
+            b = 0.1
+            m = 1
+            l = 3
+            mu = b/m*l**2
+            y[1] = (-(g/l)*np.sin(self.final_value[0]) - mu*self.final_value[1])
+            y[0] = self.final_value[1]
+            y[2] = 0
+            return y
+
 
         def go_around_circle(mob, dt):
-            self.t_offset += (dt * rate)
+            self.t_offset += (dt)
             #print(self.t_offset)
             g = 9.8132
             b = 0.1
             m = 1
             l = 3
             mu = b/m*l**2
-            self.final_value[1] += (-(g/l)*np.sin(self.final_value[0]) - mu*self.final_value[1])*dt
-            self.final_value[0] += self.final_value[1]*dt
+            # self.final_value[1] += (-(g/l)*np.sin(self.final_value[0]) - mu*self.final_value[1])*dt
+            # self.final_value[0] += self.final_value[1]*dt
+            sol=scipy.integrate.solve_ivp(fx,(self.t_offset-dt, self.t_offset),self.final_value)
+            # print(sol.y[:,-1])
+            self.final_value = sol.y[:,-1]
             mob.move_to(self.final_value)
 
         self.curve = VGroup()
@@ -277,10 +297,10 @@ class WhyLinearize(Scene):
         dot.add_updater(go_around_circle).update(dt=0.0000001)
 
         
-        sine_curve_line = always_redraw(get_curve)
+        trajectory_line = always_redraw(get_curve)
 
         self.add(dot)
-        self.add(sine_curve_line)
-        self.wait(20)
+        self.add(trajectory_line)
+        self.wait(10)
 
         dot.remove_updater(go_around_circle)
