@@ -4,3 +4,4 @@ file media/videos/intro_video/1080p60/PendulumText.mp4
 file media/videos/intro_video/1080p60/PendulumLinearize.mp4
 file media/videos/linearization/1080p60/WhyLinearize.mp4
 file media/videos/linearization/1080p60/WhyLinearize2.mp4
+file media/videos/linearization/1080p60/WhyLinearize3.mp4
