@@ -83,7 +83,7 @@ class PendulumText(Scene):
         qddtex = MathTex(r"\ddot{q}").next_to(qdtex,DOWN*0.5).scale(0.5)
         self.play(Write(qddtex))
 
-        states_title = Tex("These are called state variables").to_corner(UP+LEFT)
+        states_title = Tex("$q,\dot{q}$ are called state variables").to_corner(UP+LEFT)
         self.play(Create(states_title))
         self.wait()
         self.play(FadeOut(states_title))
