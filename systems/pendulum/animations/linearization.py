@@ -86,8 +86,8 @@ class PhasePortraitIntro(ZoomedScene):
 
     def show_axis(self):
         plane_transformed = NumberPlane(x_range=[-20, 20, 1], y_range=[-20, 20, 1],axis_config={"include_numbers": True}).scale(1)
-        xLabel = plane_transformed.get_x_axis_label(r"\theta", edge=RIGHT, direction=RIGHT).scale(0.7)
-        yLabel = plane_transformed.get_y_axis_label(r"\dot{\theta}", edge=UP, direction=UP).scale(0.7)
+        xLabel = plane_transformed.get_x_axis_label(r"q", edge=RIGHT, direction=RIGHT).scale(0.7)
+        yLabel = plane_transformed.get_y_axis_label(r"\dot{q}", edge=UP, direction=UP).scale(0.7)
         g = 9.8132
         b = 0.1
         m = 1
@@ -110,8 +110,8 @@ class WhyLinearize1(Scene):
 
     def show_axis(self):
         plane_transformed = NumberPlane(x_range=[-20, 20, 1], y_range=[-20, 20, 1],axis_config={"include_numbers": True}).scale(1)
-        xLabel = plane_transformed.get_x_axis_label(r"\theta", edge=RIGHT, direction=RIGHT).scale(0.7)
-        yLabel = plane_transformed.get_y_axis_label(r"\dot{\theta}", edge=UP, direction=UP).scale(0.7)
+        xLabel = plane_transformed.get_x_axis_label(r"q", edge=RIGHT, direction=RIGHT).scale(0.7)
+        yLabel = plane_transformed.get_y_axis_label(r"\dot{q}", edge=UP, direction=UP).scale(0.7)
         g = 9.8132
         b = 0.1
         m = 1
@@ -193,8 +193,8 @@ class WhyLinearize2(Scene):
 
     def show_axis(self):
         plane_transformed = NumberPlane(x_range=[-20, 20, 1], y_range=[-20, 20, 1],axis_config={"include_numbers": True}).scale(1)
-        xLabel = plane_transformed.get_x_axis_label(r"\theta", edge=RIGHT, direction=RIGHT).scale(0.7)
-        yLabel = plane_transformed.get_y_axis_label(r"\dot{\theta}", edge=UP, direction=UP).scale(0.7)
+        xLabel = plane_transformed.get_x_axis_label(r"q", edge=RIGHT, direction=RIGHT).scale(0.7)
+        yLabel = plane_transformed.get_y_axis_label(r"\dot{q}", edge=UP, direction=UP).scale(0.7)
         g = 9.8132
         b = 0.1
         m = 1
@@ -267,3 +267,20 @@ class WhyLinearize2(Scene):
 
         bob.remove_updater(go_around_circle)
         
+class ZeroInput(Scene):
+    def construct(self):
+        ssequation = MathTex(r"\begin{bmatrix}\dot{q} \\ \ddot{q}\end{bmatrix}",r"=",
+                                 r"\begin{bmatrix}\dot{q} \\ -\frac{g}{l}\sin{q}-\frac{b}{ml^2}\dot{q}\end{bmatrix}", r"+",
+                                 r"\begin{bmatrix}0 \\ \frac{u}{ml^2}\end{bmatrix}").shift(ORIGIN)
+        plane_transformed = NumberPlane(x_range=[-20, 20, 1], y_range=[-20, 20, 1],axis_config={"include_numbers": True}).scale(1)
+        xLabel = plane_transformed.get_x_axis_label(r"q", edge=RIGHT, direction=RIGHT).scale(0.7)
+        yLabel = plane_transformed.get_y_axis_label(r"\dot{q}", edge=UP, direction=UP).scale(0.7)
+        self.add(VGroup(plane_transformed, xLabel, yLabel))
+        background = Rectangle(color=WHITE,height=4,width=10).set_fill(BLACK,opacity=1)
+        self.play(Create(background))
+        self.play(Create(ssequation))
+        self.wait(4)
+        self.play(FadeOut(ssequation[3]),FadeOut(ssequation[4]))
+        logroup = VGroup(ssequation[0],ssequation[1],ssequation[2])
+        self.play(logroup.animate.move_to(ORIGIN))
+        self.wait(5)
