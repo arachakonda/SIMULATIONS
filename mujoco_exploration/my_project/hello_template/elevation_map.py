@@ -25,3 +25,5 @@ image = Image.fromarray(elevation_map_normalized, mode='L')
 image.save('hfield.png')
 
 print("Elevation map saved as 'hfield.png'")
+
+

@@ -18,7 +18,8 @@
 	<geom type="hfield" hfield="blackhole" pos="0 0 0"/>
 		<body pos="2 2 3">
 			<joint type="free"/>
-			<geom type="sphere" size=".2" rgba="0 .9 0 1"/>
+			<geom type="sphere" size=".2" rgba="0 .9 0 1"/> <!--note that the object passes through the field 
+			if it has dimensions that are not supported for collision computation-->
 		</body>
 	</worldbody>
 </mujoco>
