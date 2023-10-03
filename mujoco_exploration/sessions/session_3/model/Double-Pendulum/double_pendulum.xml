@@ -35,7 +35,6 @@
       <!-- shoulder and forearm in that order -->
       <key name="weird1" qpos="0 1"/>
       <key name="upright" qpos="0.01 0"/>
-      
     </keyframe>
 
   </mujoco>
