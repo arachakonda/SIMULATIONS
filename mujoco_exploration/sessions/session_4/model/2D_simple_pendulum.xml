@@ -19,6 +19,8 @@
          <joint name="joint0" type="hinge" axis = "0 1 0" pos = "0 0 0.5"/>
          <geom type="cylinder" size="0.02 0.5" mass = "0" rgba="1 1 1 1"/>
          <geom type="sphere" pos = "0 0 -0.5" mass = "1" size="0.1" rgba="1 0 0 1"/>
+         <camera name="fixed" pos="0 -.6 .3" xyaxes="1 0 0 0 1 2"/>
+         <camera name="track" pos="0 -3 1" xyaxes="1 0 0 0 1 2" mode="track"/>
       </body>
    </worldbody>
 
