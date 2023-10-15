@@ -1,0 +1,36 @@
+<mujoco model="momentum_pendulum">
+    <!-- <compiler angle="radian" autolimits="true"/> -->
+    <option timestep="0.005" wind="0.1 0.1 0">
+      <flag energy="enable"/>
+    </option>
+      <size njmax="50" nconmax="10" nstack="200"/>
+      <visual>
+        <rgba haze=".3 .3 .3 1"/>
+        <global offwidth="2560" offheight="1440" elevation="-20" azimuth="120"/>
+      </visual>
+  
+    <asset>
+      <texture type="skybox" builtin="gradient" rgb1="0.4 0.6 0.8" rgb2="0 0 0" width="32" height="512"/>
+      <texture name="grid" type="2d" builtin="checker" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" width="512" height="512"/>
+      <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance="0.2"/>
+    </asset>
+    <worldbody>
+      <geom name="floor" size="0 0 0.01" type="plane" material="grid" condim="1"/>
+      <light name="floorlight" mode="fixed" pos="0 0 50" dir="0 0 -1" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3"/>
+      <body name="rod" pos="0 0 0.7" euler="90 0 0">
+        <geom type="cylinder" size="0.01" fromto="0 0 0 0 0 0.50" rgba="0.7 0.7 0.7 1" mass="0.1"/>
+        <joint name="rod_body_joint_X" type="hinge" axis="1 0 0"/>
+        <body name="wheel" pos="0.01 0 0.5">
+          <geom type="cylinder" size="0.1" fromto="0 0 0 0.01 0 0" rgba="0.7 0.7 0.7 1" mass="0.05"/>
+          <joint name="wheel_body_joint_X" type="hinge" axis="1 0 0"/>
+        </body>
+      </body>
+    </worldbody>
+    <keyframe>
+      <key name="start" qpos="-1.50 0"/>
+    </keyframe>
+    <actuator>
+      <general joint="wheel_body_joint_X" biasprm="0.1" biastype="affine"/>
+    </actuator>
+  </mujoco>
+  
