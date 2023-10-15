@@ -1,0 +1,21 @@
+Fri Oct 13 02:58:38 2023
+WARNING: mju_openResource: unknown file '/home/ananth/projects/SIMULATIONS/mujoco_exploration/sessions/session_6/model/momentum_pendulum_c.xml'
+
+Fri Oct 13 02:59:54 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 2.7400.
+
+Fri Oct 13 03:00:45 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 24.6850.
+
+Fri Oct 13 03:02:00 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 1.3150.
+
+Fri Oct 13 03:02:29 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.9750.
+
+Fri Oct 13 03:02:52 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 2. The simulation is unstable. Time = 4.4450.
+
+Fri Oct 13 03:23:52 2023
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 11.0650.
+

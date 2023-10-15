@@ -1,0 +1,46 @@
+<mujoco model="momentum_pendulum">
+  <!-- <compiler angle="radian" autolimits="true"/> -->
+  <option timestep="0.005" wind="0.1 0.1 0"/>
+    <size njmax="50" nconmax="10" nstack="200"/>
+    <visual>
+      <rgba haze=".3 .3 .3 1"/>
+      <global offwidth="2560" offheight="1440" elevation="-20" azimuth="120"/>
+    </visual>
+
+  <asset>
+    <mesh name="base_link" file="base_link.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="axis_1_1" file="axis_1_1.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="axis_2_1" file="axis_2_1.stl" scale="0.001 0.001 0.001"/>
+    <texture type="skybox" builtin="gradient" rgb1="0.4 0.6 0.8" rgb2="0 0 0" width="32" height="512"/>
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" width="512" height="512"/>
+    <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance="0.2"/>
+  </asset>
+  <worldbody>
+    <geom name="floor" size="0 0 0.01" type="plane" material="grid" condim="1"/>
+    <light name="floorlight" mode="fixed" pos="0 0 50" dir="0 0 -1" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3"/>
+    <body name="rod" pos="0 0 0" euler="90 0 0">
+      <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="base_link"/>
+      <!-- <joint name="rod_body_joint_X" type="hinge" axis="1 0 0"/>
+      <joint name="rod_body_joint_y" type="hinge" axis="0 1 0"/> -->
+      <joint name="rod_body" type="free"/>
+        <body name="axis_1_1" pos="0 0.41 0.082" gravcomp="0">
+          <inertial pos="0 0 -0.00236136" quat="0.5 0.5 -0.5 0.5" mass="0.253015" diaginertia="0.000683 0.000353 0.000353"/>
+          <joint name="axis_1" pos="0 0 0" axis="0 0 1"/>
+          <geom pos="0 -0.41 -0.082" type="mesh" rgba="0.7 0.7 0.7 1" mesh="axis_1_1"/>
+        </body>
+        <body name="axis_2_1" pos="0.082 0.41 0" gravcomp="0">
+          <inertial pos="-0.00236136 0 0" mass="0.253015" diaginertia="0.000683 0.000353 0.000353"/>
+          <joint name="axis_2" pos="0 0 0" axis="1 0 0"/>
+          <geom pos="-0.082 -0.41 0" type="mesh" rgba="0.7 0.7 0.7 1" mesh="axis_2_1"/>
+        </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor gear="1" joint="axis_1"/>
+    <motor gear="1" joint="axis_2"/>
+  </actuator>
+  <keyframe>
+    <key name="start" qpos="0. 0. 0. 0.70710678 0.70710678 0.
+    0. 0. 0."/>
+  </keyframe>
+</mujoco>
