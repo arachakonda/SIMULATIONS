@@ -1,0 +1,3 @@
+[submodule "gym-quad"]
+	path = gym-quad
+	url = git@github.com:arachakonda/gym-quad.git
