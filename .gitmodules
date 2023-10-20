@@ -1,3 +1,6 @@
 [submodule "gym-quad"]
 	path = gym-quad
 	url = git@github.com:arachakonda/gym-quad.git
+[submodule "systems/DYNAMICAL-SYSTEMS"]
+	path = systems/DYNAMICAL-SYSTEMS
+	url = git@github.com:arachakonda/DYNAMICAL-SYSTEMS.git
